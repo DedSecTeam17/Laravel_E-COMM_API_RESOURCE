@@ -18,10 +18,28 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 
+
+Route::group([
+    'prefix' => 'auth'
+], function () {
+    Route::post('login', 'AuthController@login');
+    Route::post('signup', 'AuthController@signup');
+
+    Route::group([
+        'middleware' => 'auth:api'
+    ], function() {
+        Route::get('logout', 'AuthController@logout');
+        Route::get('user', 'AuthController@user');
+    });
+});
 Route::apiResource('/products','ProductController');
 
+
+Route::apiResource('/categories','CategoryController');
 
 Route::group(['prefix'=>'products'],function ()
 {
     Route::apiResource('/{product}/reviews','ReviewController');
 });
+
+
